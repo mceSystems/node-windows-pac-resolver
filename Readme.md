@@ -1,16 +1,14 @@
 Generates a pac URI, according to windows global settings, using WinHTTP API
-===============================
 
 Installation
 ============
 
-Then, just run
+Just run
 
 	npm install windows-pac-resolver
 
 API
 ===
-
 	const wpr = require('windows-pac-resolver');
 	const pacURI = wpr.getPACUri();
 
