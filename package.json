@@ -1,6 +1,6 @@
 {
 	"name": "windows-pac-resolver",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Generates a pac URI, according to windows global settings, using WinHTTP API",
 	"main": "index.js",
 	"repository": {
