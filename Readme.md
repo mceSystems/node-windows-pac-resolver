@@ -15,7 +15,7 @@ API
 	const pacURI = wpr.getPACUri();
 
 ### getPACUri()
-Returns a "pac+<protoco>://..." URI, with the PAC file configured for the system. Returns `undefined` if no proxy is configured 
+Returns a "pac+<protocol>://..." URI, with the PAC file configured for the system. Returns `undefined` if no proxy is configured 
 
 License
 =======
