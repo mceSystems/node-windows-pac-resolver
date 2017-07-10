@@ -1,8 +1,12 @@
 const debug = require("debug")("windows-pac-resolver");
+const path = require("path");
 
 let lib;
 function _loadModules() {
-	lib = require("nbind").init().lib;
+	if(lib){
+		return;
+	}
+	lib = require("nbind").init(path.resolve(__dirname)).lib;
 }
 
 function isFilePath(path){
