@@ -3,28 +3,63 @@ const path = require("path");
 
 let lib;
 function _loadModules() {
-	if(lib){
+	if (lib) {
 		return;
 	}
 	lib = require("nbind").init(path.resolve(__dirname)).lib;
 }
 
-function isFilePath(path){
+function isFilePath(path) {
 	return (0 === path.indexOf("\\\\")) || (":" === path[1] && ("\\" === path[2] || "/" === path[2]));
 }
 
-function switchToURI(path){
-	if(!isFilePath(path)){
+function generatePacFile(proxyDetails = "") {
+	let data = `function FindProxyForURL(url, host) {`;
+
+	if (typeof proxyDetails === "string" && proxyDetails.length > 0) {
+		proxyDetails = `return "PROXY ${proxyDetails}";`;
+	} else if (typeof proxyDetails === "object" && Object.keys(proxyDetails).length > 0) {
+		proxyDetails = Object.keys(proxyDetails)
+			.reduce((prev, curr) => {
+				return `${prev} if (url.substr(0,${curr.length + 1}) === "${curr}:") { return "PROXY ${proxyDetails[curr]}"; }`
+			}, "");
+	}
+
+	return `${data} ${proxyDetails} return "DIRECT"; }`;
+}
+
+function extractProxyAddress(proxyDetails) {
+	if (proxyDetails.indexOf(";") === -1) {
+		return proxyDetails;
+	}
+
+	return proxyDetails
+		.split(";")
+		.reduce((prev, proxyProtocolDetails) => {
+			const [protocol = "", url = ""] = proxyProtocolDetails.split("=", 2);
+			if (protocol && url) {
+				prev[protocol] = url;
+			}
+			return prev;
+		}, {});
+}
+
+function generateDataURI(data) {
+	return `data:text/plain;base64,${Buffer.from(data).toString("base64")}`;
+}
+
+function switchToURI(path) {
+	if (!isFilePath(path)) {
 		return path;
 	}
-	if(0 !== path.indexOf("\\\\")){
+	if (0 !== path.indexOf("\\\\")) {
 		path = `/${path}`;
 	}
 	return `file://${path}`;
 }
 
-function toPACUri(path){
-	if(!path){
+function toPACUri(path) {
+	if (!path) {
 		return "";
 	}
 	path = path.replace(/\\/g, "/")
@@ -42,14 +77,20 @@ function getPACUri() {
 		debug(`Failed retrieving IE proxy details: ${e.message}`);
 		return;
 	}
-	if(!ieProxyDetails){
+	if (!ieProxyDetails) {
 		return;
 	}
-	if(ieProxyDetails.autoConfigurationFileEnabled){
+	if (ieProxyDetails.autoConfigurationFileEnabled) {
 		return toPACUri(ieProxyDetails.autoConfigurationFile);
 	}
-	if(ieProxyDetails.manualConfigurationFile){
+	if (ieProxyDetails.manualConfigurationFile) {
 		return toPACUri(ieProxyDetails.manualConfigurationFile);
+	}
+	if (ieProxyDetails.manualProxyAddress) {
+		const proxyDetails = extractProxyAddress(ieProxyDetails.manualProxyAddress);
+		const proxyPacData = generatePacFile(proxyDetails);
+		const proxyPacDataURI = generateDataURI(proxyPacData);
+		return toPACUri(proxyPacDataURI);
 	}
 }
 
