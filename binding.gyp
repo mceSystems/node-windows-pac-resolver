@@ -7,7 +7,12 @@
 			"sources": [
 				"native\\winhttpBindings.cpp"
 			],
-			"libraries": [ "WinHTTP.lib" ]
+			"libraries": [ "WinHTTP.lib" ],
+			"msbuild_settings": {
+				"ClCompile": {
+					"RuntimeLibrary": "MultiThreaded"
+				}
+			}
 		}
 	],
 	"includes": [
