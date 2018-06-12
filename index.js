@@ -18,18 +18,22 @@ function generatePacFile(proxyDetails = "") {
 
 	if (typeof proxyDetails === "string" && proxyDetails.length > 0) {
 		proxyDetails = `return "PROXY ${proxyDetails}";`;
-	} else if (typeof proxyDetails === "object" && Object.keys(proxyDetails).length > 0) {
-		proxyDetails = Object.keys(proxyDetails)
-			.reduce((prev, curr) => {
-				return `${prev} if (url.substr(0,${curr.length + 1}) === "${curr}:") { return "PROXY ${proxyDetails[curr]}"; }`
-			}, "");
+	} else if (typeof proxyDetails === "object") {
+		if (0 === Object.keys(proxyDetails).length) {
+			proxyDetails = "";
+		} else {
+			proxyDetails = Object.keys(proxyDetails)
+				.reduce((prev, curr) => {
+					return `${prev} if (url.substr(0,${curr.length + 1}) === "${curr}:") { return "PROXY ${proxyDetails[curr]}"; }`
+				}, "");
+		}
 	}
 
 	return `${data} ${proxyDetails} return "DIRECT"; }`;
 }
 
-function extractProxyAddress(proxyDetails) {
-	if (proxyDetails.indexOf(";") === -1) {
+function extractProxyAddress(proxyDetails = "") {
+	if (proxyDetails.indexOf("=") === -1) {
 		return proxyDetails;
 	}
 
