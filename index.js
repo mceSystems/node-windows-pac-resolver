@@ -6,7 +6,7 @@ function _loadModules() {
 	if (lib) {
 		return;
 	}
-	lib = require("nbind").init(path.resolve(__dirname)).lib;
+	lib = require("@mcesystems/nbind").init(path.resolve(__dirname)).lib;
 }
 
 function isFilePath(path) {

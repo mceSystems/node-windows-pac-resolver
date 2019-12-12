@@ -1,6 +1,6 @@
 {
 	"name": "windows-pac-resolver",
-	"version": "1.0.7",
+	"version": "2.0.0",
 	"description": "Generates a pac URI, according to windows global settings, using WinHTTP API",
 	"main": "index.js",
 	"repository": {
@@ -13,7 +13,7 @@
 		"emcc-path": "emcc-path",
 		"copyasm": "copyasm",
 		"ndts": "ndts",
-		"install": "autogypi && set windows_pac_resolver_msvs_version=%npm_config_msvs_version% && set npm_config_msvs_version=2015 && node-gyp configure build --msvs_version=2015 && set npm_config_msvs_version=%windows_pac_resolver_msvs_version%",
+		"install": "autogypi && node-gyp configure build",
 		"test": "mocha test/**/*.js --exit"
 	},
 	"author": "mce",
@@ -21,7 +21,7 @@
 	"dependencies": {
 		"autogypi": "^0.2.2",
 		"debug": "^2.6.8",
-		"nbind": "^0.3.12",
+		"@mcesystems/nbind": "^0.3.17",
 		"node-gyp": "^3.6.2"
 	},
 	"devDependencies": {
