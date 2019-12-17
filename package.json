@@ -1,6 +1,6 @@
 {
 	"name": "windows-pac-resolver",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Generates a pac URI, according to windows global settings, using WinHTTP API",
 	"main": "index.js",
 	"repository": {
@@ -21,7 +21,7 @@
 	"dependencies": {
 		"autogypi": "^0.2.2",
 		"debug": "^2.6.8",
-		"@mcesystems/nbind": "^0.3.17",
+		"@mcesystems/nbind": "^0.3.18",
 		"node-gyp": "^3.6.2"
 	},
 	"devDependencies": {
