@@ -7,7 +7,10 @@
 			"sources": [
 				"native\\winhttpBindings.cpp"
 			],
-			"libraries": [ "WinHTTP.lib" ],
+			"libraries": [ 
+				"WinHTTP.lib",
+				"-DelayLoad:node.exe"
+			],
 			"msbuild_settings": {
 				"ClCompile": {
 					"RuntimeLibrary": "MultiThreaded"
