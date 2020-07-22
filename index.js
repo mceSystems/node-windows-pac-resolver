@@ -67,7 +67,7 @@ function toPACUri(path) {
 		return "";
 	}
 	path = path.replace(/\\/g, "/")
-	return `pac+${switchToURI(path)}`;
+	return `pac+${(switchToURI(path) || "").trim()}`;
 }
 
 function getPACUri() {
