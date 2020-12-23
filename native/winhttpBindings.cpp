@@ -1,13 +1,14 @@
 #include "stdafx.h"
-#include "nbind/nbind.h"
+#include "napi.h"
 #include <iostream>
 #include <codecvt>
 #include <windows.h>
 #include <winhttp.h>
 
 using namespace std;
+using namespace Napi;
 
-string getIEProxyDetails()
+Value getIEProxyDetails(const CallbackInfo& info)
 {
 	wstring ret = L"{";
 	WINHTTP_CURRENT_USER_IE_PROXY_CONFIG proxyInfo = {0};
@@ -51,10 +52,12 @@ string getIEProxyDetails()
 
 	using convert_type = codecvt_utf8<wchar_t>;
 	wstring_convert<convert_type, wchar_t> converter;
-	return converter.to_bytes(ret);
+	return String::New(info.Env(), converter.to_bytes(ret));
 }
 
-NBIND_GLOBAL()
-{
-	function(getIEProxyDetails);
+Object Init(Env env, Object exports) {
+	exports.Set(String::New(env, "getIEProxyDetails"), Function::New<getIEProxyDetails>(env));
+	return exports;
 }
+
+NODE_API_MODULE(NODE_GYP_MODULE_NAME, Init)

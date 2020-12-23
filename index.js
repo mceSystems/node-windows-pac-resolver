@@ -1,12 +1,11 @@
 const debug = require("debug")("windows-pac-resolver");
-const path = require("path");
 
 let lib;
 function _loadModules() {
 	if (lib) {
 		return;
 	}
-	lib = require("@mcesystems/nbind").init(path.resolve(__dirname)).lib;
+	lib = require("bindings")("binding");
 }
 
 function isFilePath(path) {
